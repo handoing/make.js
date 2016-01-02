@@ -1,0 +1,10 @@
+{
+  "name": "makejs",
+  "version": "0.1.0",
+  "main": "make.js",
+  "description": "personal library",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/handoing/make.js"
+  }
+}
