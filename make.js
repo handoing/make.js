@@ -56,5 +56,50 @@
         return this;
     };
 
+    make.dom = function(selector, createOptions) {
+        var self = this,
+            elements = [];
+        if (createOptions) {
+            var element = document.createElement(selector);
+            for (var k in createOptions) {
+                element[k] = createOptions[k];
+            }
+        } else {
+            if (make.string(selector)) {
+                elements = [].slice.call(document.querySelectorAll(selector));
+            } else {
+                if (make.object(selector) && selector.attributes) { elements = [selector]; }
+            }
+            self._elements = elements;
+            self.length = elements.length;
+            return self;
+        }
+    };
+
+    make.on = function(events, fn) {
+        var self = this,
+            elements = self._elements;
+        events = events.split(" ");
+        for (var i = 0, lenEl = elements.length; i < lenEl; i++) {
+            var element = elements[i];
+            for (var j = 0, lenEv = events.length; j < lenEv; j++) {
+                if (element.addEventListener) { element.addEventListener(events[j], fn, false); }
+            }
+        }
+
+    }
+
+    make.ready = function(callback) {
+        if (document && make.function(document.addEventListener)) {
+            document.addEventListener("DOMContentLoaded", callback, false);
+        } else if (window && make.function(window.addEventListener)) {
+            window.addEventListener("load", callback, false);
+        } else {
+            document.onreadystatechange = function() {
+                if (document.readyState === "complete") { callback(); }
+            }
+        }
+    };
+
     window.make = make;
 })();
